@@ -40,7 +40,8 @@ const Login = () => {
       className="mx-auto flex w-[90%] flex-col items-center justify-center lg:w-2/3 xl:w-1/2"
     >
       <span className="w-full text-center font-bold text-[32px] leading-[32px] md:text-[48px] md:leading-[53px]">
-        Welcome to<br /> Culture Fit
+        Welcome to
+        <br /> Culture Fit
       </span>
       <span className="mt-2.5 mb-5 w-full text-center text-[#71717A] text-[14px] leading-[14px]">
         Enter your credentials to login.

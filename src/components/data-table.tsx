@@ -38,12 +38,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className="flex h-full w-full flex-col items-start justify-start gap-5">
-      {/* <Input
-        placeholder="Filter company by email..."
-        value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-        onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
-        className="mr-auto max-w-2xl"
-      /> */}
       <div className="h-[calc(100%-112px)] w-full overflow-auto rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-[1] bg-muted">
@@ -80,7 +74,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </TableBody>
         </Table>
       </div>
-      <div className="mt-auto flex w-full items-center justify-end">
+      <div className="flex w-full items-center justify-end">
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="flex items-center gap-2">
             <Label htmlFor="rows-per-page" className="hidden font-medium text-sm md:flex">

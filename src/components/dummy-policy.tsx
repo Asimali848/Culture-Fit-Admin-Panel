@@ -27,7 +27,7 @@ const policies = [
 
 const CulturePolicies = () => {
   return (
-    <Card className="h-full w-full shadow-none">
+    <Card className="h-fit w-full shadow-none">
       <CardHeader>
         <CardTitle className="font-semibold text-primary text-xl">Company Documents</CardTitle>
       </CardHeader>

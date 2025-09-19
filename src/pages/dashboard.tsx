@@ -16,7 +16,7 @@ const Dashboard = () => {
     <>
       <div className="flex h-full w-full flex-col items-start justify-start gap-5 md:overflow-hidden">
         <div className="flex w-full items-start justify-start gap-2.5">
-          <span className="flex-1 text-left font-bold text-[32px] leading-[32px]">Companies</span>
+          <span className="flex-1 text-left font-bold text-[32px] text-primary leading-[32px]">Companies</span>
           <div className="hidden flex-col gap-2.5 md:flex md:flex-row">
             <Button variant="default" size="sm" type="button" onClick={() => setOpen(true)}>
               Add Company &nbsp;

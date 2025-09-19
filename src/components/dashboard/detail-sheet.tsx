@@ -1,25 +1,29 @@
 import type { Dispatch, SetStateAction } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 interface DetailSheetProps {
-  id?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  company?: {
+    company_name: string;
+    email: string;
+    password: string;
+    owner_name: string;
+    owner_email: string;
+    company_type: string;
+    website: string;
+    contact_number: string;
+    company_address: string;
+    description: string;
+  };
 }
 
-const DetailSheet = ({ open, setOpen }: DetailSheetProps) => {
+const DetailSheet = ({ open, setOpen, company }: DetailSheetProps) => {
+  if (!company) return null;
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className="w-full min-w-2xl">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle className="font-semibold text-lg">Company Details</SheetTitle>
           <SheetDescription>View all information about this company</SheetDescription>
@@ -28,55 +32,41 @@ const DetailSheet = ({ open, setOpen }: DetailSheetProps) => {
         <div className="flex flex-col gap-5 p-3">
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Company Name</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">DigiMark Developer</p>
+            <p className="col-span-2 font-medium text-foreground text-sm">{company.company_name}</p>
           </div>
-
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Email</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">digimark@gmail.com</p>
+            <p className="col-span-2 font-medium text-foreground text-sm">{company.email}</p>
           </div>
-
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Password</p>
             <p className="col-span-2 font-medium text-foreground text-sm">••••••••</p>
           </div>
-
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Owner Name</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">John Doe</p>
+            <p className="col-span-2 font-medium text-foreground text-sm">{company.owner_name}</p>
           </div>
-
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Owner Email</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">owner@example.com</p>
+            <p className="col-span-2 font-medium text-foreground text-sm">{company.owner_email}</p>
           </div>
-
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Website</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">www.digimark.com</p>
-          </div>
-
-          <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
-            <p className="text-muted-foreground text-sm">Company Address</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">123 Main St, New York, NY</p>
-          </div>
-
-          <div className="grid grid-cols-3 items-start gap-2">
-            <p className="text-muted-foreground text-sm">Description</p>
-            <p className="col-span-2 font-medium text-foreground text-sm leading-relaxed">
-              DigiMark Developer is a leading provider of innovative web and mobile solutions. We help businesses scale
-              with modern technology and creative design.
+            <p className="col-span-2 font-medium text-foreground text-sm">
+              <a href={company.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                {company.website}
+              </a>
             </p>
           </div>
+          <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
+            <p className="text-muted-foreground text-sm">Address</p>
+            <p className="col-span-2 font-medium text-foreground text-sm">{company.company_address}</p>
+          </div>
+          <div className="grid grid-cols-3 items-start gap-2">
+            <p className="text-muted-foreground text-sm">Description</p>
+            <p className="col-span-2 font-medium text-foreground text-sm leading-relaxed">{company.description}</p>
+          </div>
         </div>
-
-        <SheetFooter className="mt-auto">
-          <SheetClose asChild>
-            <Button variant="outline" className="w-full">
-              Close
-            </Button>
-          </SheetClose>
-        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

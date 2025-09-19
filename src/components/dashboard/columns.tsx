@@ -15,8 +15,15 @@ import DetailSheet from "./detail-sheet";
 
 export type RowData = {
   id: string;
-  email: string;
   company_name: string;
+  email: string;
+  password: string;
+  owner_name: string;
+  owner_email: string;
+  company_type: string;
+  website: string;
+  technology?: string;
+  contact_number: string;
   company_address: string;
   description: string;
 };
@@ -26,7 +33,7 @@ const ActionsCell = ({ row }: { row: Row<RowData> }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [warn, setWarn] = useState<boolean>(false);
   const [detail, setDetail] = useState<boolean>(false);
-  const [selected, setSelected] = useState<string>("");
+  const [selectedCompany, setSelectedCompany] = useState<RowData | null>(null);
 
   return (
     <>
@@ -43,33 +50,31 @@ const ActionsCell = ({ row }: { row: Row<RowData> }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              setSelected(row.original.id);
+              navigate(`/company/${row.original.id}`);
             }}
           >
             <FileText />
-            <span className="ml-2 text-sm" onClick={() => navigate("/company-detail")}>
-              View Details
-            </span>
+            <span className="ml-2 text-sm">View Details</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              setSelected(row.original.id);
+              setSelectedCompany(row.original);
               setWarn(true);
             }}
           >
             <Trash />
-            <span className="ml-2 text-sm">Suspend</span>
+            <span className="ml-2 text-sm">Deactivate</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <WarningModal
         open={warn}
         title="Are you sure?"
-        text={<span>Are you sure you want to Suspend this company?</span>}
+        text={<span>Are you sure you want to Deactivate this company?</span>}
         setOpen={setWarn}
       />
-      <CompanySheet id={selected} open={open} setOpen={setOpen} />
-      <DetailSheet id={selected} open={detail} setOpen={setDetail} />
+      <CompanySheet id={row.original.id} open={open} setOpen={setOpen} company={row.original} />
+      <DetailSheet open={detail} setOpen={setDetail} company={selectedCompany ?? undefined} />
     </>
   );
 };

@@ -13,23 +13,37 @@ interface CompanySheetProps {
   id?: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  company?: {
+    company_name: string;
+    email: string;
+    password?: string;
+    owner_name?: string;
+    owner_email?: string;
+    company_type?: string;
+    website?: string;
+    contact_number?: string;
+    company_address?: string;
+    description?: string;
+  };
 }
 
-const CompanySheet = ({ id, open, setOpen }: CompanySheetProps) => {
+const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
-    defaultValues: {
-      company_name: "",
-      email: "",
-      password: "",
-      owner_name: "",
-      owner_email: "",
-      company_type: "",
-      website: "",
-      contact_number: "",
-      company_address: "",
-      description: "",
-    },
+    defaultValues: company
+      ? { ...company }
+      : {
+          company_name: "",
+          email: "",
+          password: "",
+          owner_name: "",
+          owner_email: "",
+          company_type: "",
+          website: "",
+          contact_number: "",
+          company_address: "",
+          description: "",
+        },
   });
 
   const onSubmit = () => {
