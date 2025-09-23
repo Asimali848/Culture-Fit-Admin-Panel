@@ -9,7 +9,6 @@ interface DetailSheetProps {
     email: string;
     password: string;
     owner_name: string;
-    owner_email: string;
     company_type: string;
     website: string;
     contact_number: string;
@@ -45,10 +44,6 @@ const DetailSheet = ({ open, setOpen, company }: DetailSheetProps) => {
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Owner Name</p>
             <p className="col-span-2 font-medium text-foreground text-sm">{company.owner_name}</p>
-          </div>
-          <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
-            <p className="text-muted-foreground text-sm">Owner Email</p>
-            <p className="col-span-2 font-medium text-foreground text-sm">{company.owner_email}</p>
           </div>
           <div className="grid grid-cols-3 items-start gap-2 border-b pb-3">
             <p className="text-muted-foreground text-sm">Website</p>

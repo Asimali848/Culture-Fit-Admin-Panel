@@ -19,12 +19,12 @@ declare type PostLoginResponse = {
 declare type CompanyInfo = {
   company_name: string,
   email: string,
-  password: string,
+  password?: string,
+  owner_name: string,
   domain: string,
   company_type: string,
   company_size: string,
-  owner_name: string,
   phone_number: string,
   company_address: string,
   company_description: string,
-}
+};

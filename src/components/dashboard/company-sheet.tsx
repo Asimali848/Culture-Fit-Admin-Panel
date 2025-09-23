@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { type Dispatch, type SetStateAction } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -8,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { companySchema } from "@/lib/form-schemas";
+import { usePostCompanyMutation, useUpdateCompanyMutation } from "@/store/services/company";
 
 interface CompanySheetProps {
   id?: string;
@@ -18,16 +21,19 @@ interface CompanySheetProps {
     email: string;
     password?: string;
     owner_name?: string;
-    owner_email?: string;
+    company_size?: string;
     company_type?: string;
-    website?: string;
-    contact_number?: string;
+    domain?: string;
+    phone_number?: string;
     company_address?: string;
-    description?: string;
+    company_description?: string;
   };
 }
 
 const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
+  const [postCompany, { isLoading }] = usePostCompanyMutation();
+  const [updateCompany, { isLoading: isLoadingUpdate }] = useUpdateCompanyMutation();
+
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema),
     defaultValues: company
@@ -37,16 +43,58 @@ const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
           email: "",
           password: "",
           owner_name: "",
-          owner_email: "",
+          company_size: "",
           company_type: "",
-          website: "",
-          contact_number: "",
+          domain: "",
+          phone_number: "",
           company_address: "",
-          description: "",
+          company_description: "",
         },
   });
 
-  const onSubmit = () => {
+  const onSubmit = async (data: z.infer<typeof companySchema>) => {
+    if (id) {
+      const response = await updateCompany({
+        id,
+        data: {
+          ...data,
+          password: data.password ?? "",
+          owner_name: data.owner_name ?? "",
+          domain: data.domain ?? "",
+          company_type: data.company_type ?? "",
+          company_size: data.company_size ?? "",
+          phone_number: data.phone_number ?? "",
+          company_address: data.company_address ?? "",
+          company_description: data.company_description ?? "",
+        },
+      });
+      if (response.data) {
+        toast.success("Company Updated Successfully!");
+      } else {
+        toast.error("Something went wrong, Please try again!");
+      }
+      setOpen(false);
+      return;
+    }
+
+    const response = await postCompany({
+      ...data,
+      domain: data.domain ?? "",
+      company_size: data.company_size ?? "",
+      company_type: data.company_type ?? "",
+      owner_name: data.owner_name ?? "",
+      phone_number: data.phone_number ?? "",
+      company_address: data.company_address ?? "",
+      company_description: data.company_description ?? "",
+      password: data.password ?? "",
+    });
+
+    if (response.data) {
+      toast.success("Company Created Successfully!");
+    } else {
+      toast.error("Something went wrong, Please try again!");
+    }
+
     setOpen(false);
   };
 
@@ -126,14 +174,14 @@ const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
 
             <FormField
               control={form.control}
-              name="owner_email"
+              name="company_size"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Owner Email<span className="text-destructive">*</span>
+                    Company Size<span className="text-destructive">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="owner@example.com" {...field} />
+                    <Input placeholder="1-10 employees" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -155,7 +203,7 @@ const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
             />
             <FormField
               control={form.control}
-              name="website"
+              name="domain"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Website</FormLabel>
@@ -168,7 +216,7 @@ const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
             />
             <FormField
               control={form.control}
-              name="contact_number"
+              name="phone_number"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
@@ -200,7 +248,7 @@ const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
 
             <FormField
               control={form.control}
-              name="description"
+              name="company_description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -212,9 +260,15 @@ const CompanySheet = ({ id, open, setOpen, company }: CompanySheetProps) => {
               )}
             />
 
-            <Button type="submit" className="w-full">
-              {id ? "Update Company" : "Add Company"}
-            </Button>
+            {isLoading || isLoadingUpdate ? (
+              <div className="flex items-center justify-center">
+                <Loader2 className="size-4 animate-spin" />
+              </div>
+            ) : (
+              <Button type="submit" className="w-full" disabled={isLoading || isLoadingUpdate} variant="default">
+                {id ? "Update Company" : "Add Company"}
+              </Button>
+            )}
           </form>
         </Form>
       </SheetContent>

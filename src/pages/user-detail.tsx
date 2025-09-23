@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useEmployeeColumns } from "@/components/company-detail/employee-column";
@@ -6,14 +7,23 @@ import CulturePolicies from "@/components/dummy-policy";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { employees, rows } from "@/lib/constants";
+import { employees } from "@/lib/constants";
+import { useGetCompanyQuery } from "@/store/services/company";
 
 const UserDetail = () => {
   const { id } = useParams<{ id: string }>();
   const columns = useEmployeeColumns();
   const [search, setSearch] = useState<string>("");
 
-  const company = rows.find((c) => c.id === id);
+  const { data: company, isLoading } = useGetCompanyQuery(id ?? "");
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full w-full flex-col gap-5 overflow-auto">
@@ -26,49 +36,49 @@ const UserDetail = () => {
             <CardContent className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
               <div className="flex flex-col rounded-lg border p-4 shadow">
                 <p className="font-semibold text-lg">Company Email</p>
-                <p className="text-muted-foreground text-sm">{company?.email}</p>
+                <p className="text-muted-foreground text-sm">{company?.email || "N/A"}</p>
               </div>
 
               <div className="flex flex-col rounded-lg border p-4 shadow">
                 <p className="font-semibold text-lg">Owner Name</p>
-                <p className="text-muted-foreground text-sm">{company?.owner_name}</p>
-              </div>
-
-              <div className="flex flex-col rounded-lg border p-4 shadow">
-                <p className="font-semibold text-lg">Owner Email</p>
-                <p className="text-muted-foreground text-sm">{company?.owner_email}</p>
+                <p className="text-muted-foreground text-sm">{company?.owner_name || "N/A"}</p>
               </div>
 
               <div className="flex flex-col rounded-lg border p-4 shadow">
                 <p className="font-semibold text-lg">Website</p>
                 <a
-                  href={company?.website}
+                  href={company?.domain || "N/A"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground text-sm underline"
                 >
-                  {company?.website}
+                  {company?.domain || "N/A"}
                 </a>
               </div>
 
               <div className="flex flex-col rounded-lg border p-4 shadow">
-                <p className="font-semibold text-lg">Technology</p>
-                <p className="text-muted-foreground text-sm">{company?.technology}</p>
+                <p className="font-semibold text-lg">Company Size</p>
+                <p className="text-muted-foreground text-sm">{company?.company_size || "N/A"}</p>
+              </div>
+
+              <div className="flex flex-col rounded-lg border p-4 shadow">
+                <p className="font-semibold text-lg">Company Type</p>
+                <p className="text-muted-foreground text-sm">{company?.company_type || "N/A"}</p>
               </div>
 
               <div className="flex flex-col rounded-lg border p-4 shadow">
                 <p className="font-semibold text-lg">Phone</p>
-                <p className="text-muted-foreground text-sm">{company?.contact_number}</p>
+                <p className="text-muted-foreground text-sm">{company?.phone_number || "N/A"}</p>
               </div>
 
               <div className="flex flex-col rounded-lg border p-4 shadow">
                 <p className="font-semibold text-lg">Address</p>
-                <p className="text-muted-foreground text-sm">{company?.company_address}</p>
+                <p className="text-muted-foreground text-sm">{company?.company_address || "N/A"}</p>
               </div>
 
               <div className="col-span-4 flex flex-col rounded-lg border p-4 shadow">
                 <p className="font-semibold text-lg">Description</p>
-                <p className="w-full text-muted-foreground text-sm">{company?.description}</p>
+                <p className="w-full text-muted-foreground text-sm">{company?.company_description || "N/A"}</p>
               </div>
             </CardContent>
           </Card>

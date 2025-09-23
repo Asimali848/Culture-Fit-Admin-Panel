@@ -19,7 +19,6 @@ export type RowData = {
   email: string;
   password: string;
   owner_name: string;
-  owner_email: string;
   company_type: string;
   website: string;
   technology?: string;
@@ -108,10 +107,10 @@ export const useRowColumns = () => {
       ),
     },
     {
-      accessorKey: "description",
+      accessorKey: "company_description",
       header: "Description",
       cell: ({ row }: { row: Row<RowData> }) => (
-        <span className="font-semibold text-[#71717A] text-sm">{row.getValue("description")}</span>
+        <span className="font-semibold text-[#71717A] text-sm">{row.getValue("company_description")}</span>
       ),
     },
     {

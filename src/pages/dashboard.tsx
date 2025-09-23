@@ -1,16 +1,19 @@
-import { Building2, Download } from "lucide-react";
+import { Building2, Download, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRowColumns } from "@/components/dashboard/columns";
 import CompanySheet from "@/components/dashboard/company-sheet";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { rows } from "@/lib/constants";
+import { useGetCompaniesQuery } from "@/store/services/company";
 
 const Dashboard = () => {
   const columns = useRowColumns();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
+  const { data, isLoading } = useGetCompaniesQuery({
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <>
@@ -44,10 +47,20 @@ const Dashboard = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <DataTable
-            columns={columns}
-            data={search ? rows.filter((e) => e.email.toLowerCase().includes(search.toLowerCase())) : rows}
-          />
+          {isLoading ? (
+            <p className="mx-auto flex h-full w-full items-center justify-center">
+              <Loader2 className="size-8 animate-spin text-primary" />
+            </p>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={
+                search
+                  ? (data ?? []).filter((e: { email: string }) => e.email.toLowerCase().includes(search.toLowerCase()))
+                  : (data ?? [])
+              }
+            />
+          )}
         </div>
         <CompanySheet open={open} setOpen={setOpen} />
       </div>
